@@ -178,6 +178,14 @@ class Cli(unittest.TestCase):
                                  "--frequency-source", APPA, "--price", "12.5", "--price-source", APPA, "--json")
         self.assertEqual(json.loads(text)["market"]["sam"], 38)           # 37.5 -> 38
 
+    def test_units_gives_a_spanish_plural(self):
+        code, text, _ = self.cli("bottom-up", "--customers", "10", "--customers-source", APPA, "--frequency", "12",
+                                 "--frequency-source", APPA, "--price", "30", "--price-source", APPA,
+                                 "--unit", "suscripción", "--units", "suscripciones")
+        self.assertEqual(code, 0)
+        self.assertIn("12 suscripciones a year", text)
+        self.assertNotIn("suscripcións", text)
+
     def test_check_reads_a_bad_file(self):
         os.makedirs(self.seed)
         shutil.copy(BAD, self.path)
