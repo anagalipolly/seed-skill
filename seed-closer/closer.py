@@ -257,16 +257,19 @@ def sender_of(cfg):
             "address": " ".join(str(f.get("company_address") or "").split())}
 
 
-def money_short(v):
+def money_short(v, currency="USD"):
+    """1500000 -> $1.5M for USD; any other currency code is printed in front (VES 1.5M)."""
     if v is None or v == "":
         return None
     if isinstance(v, str):
         return v.strip()
+    cur = str(currency or "USD").strip()
+    sym = "$" if cur.upper() == "USD" else cur + " "
     x = float(v)
     for unit, div in (("B", 1e9), ("M", 1e6), ("K", 1e3)):
         if abs(x) >= div:
-            return "$%s%s" % (("%.2f" % (x / div)).rstrip("0").rstrip("."), unit)
-    return "$%.0f" % x
+            return "%s%s%s" % (sym, ("%.2f" % (x / div)).rstrip("0").rstrip("."), unit)
+    return "%s%.0f" % (sym, x)
 
 
 def sentence_case(text):
@@ -286,7 +289,7 @@ def base_values(cfg, sender):
         raise CloserError("seed/config.json needs startup.name and startup.one_liner for the email")
     sig = "\n".join(x for x in (sender["name"], "%s, %s" % (sender["title"], name), sender["address"]) if x)
     return {"startup": name, "one_liner": one.rstrip("."), "one_liner_sentence": sentence_case(one),
-            "tagline": sentence_case(st.get("tagline") or one), "raise": money_short(st.get("raise")),
+            "tagline": sentence_case(st.get("tagline") or one), "raise": money_short(st.get("raise"), st.get("currency")),
             "stage": str(st.get("stage") or "seed").strip(), "instrument": st.get("instrument") or None,
             "sector": st.get("sector") or None, "geography": st.get("geography") or None,
             "sender": sender["name"], "sender_first": sender["first"], "title": sender["title"],
