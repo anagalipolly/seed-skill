@@ -489,3 +489,11 @@ class Flow(unittest.TestCase):
             self.assertEqual(code, 1, argv)
             self.assertNotIn("Traceback", err)
         self.assertEqual(run([])[0], 1)
+
+
+class MoneyShortCurrencyTests(unittest.TestCase):
+    def test_usd_and_other_currency(self):
+        closer = load("seed-closer", "closer")
+        self.assertEqual(closer.money_short(1500000), "$1.5M")
+        self.assertEqual(closer.money_short(1500000, "EUR"), "EUR 1.5M")
+        self.assertEqual(closer.money_short("USD 150K", "EUR"), "USD 150K")
