@@ -315,3 +315,26 @@ class SkillDoc(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CurrencySymbolTests(unittest.TestCase):
+    """Added for the Latin America adaptation: a non-USD currency must not print a dollar sign."""
+
+    def test_usd_keeps_dollar_sign(self):
+        model_mod = load("seed-model", "model")
+        model_mod.set_currency("USD")
+        self.assertEqual(model_mod.money(1500), "$1,500")
+        self.assertEqual(model_mod.money(-2.5, 2), "-$2.50")
+
+    def test_other_currency_prints_code(self):
+        model_mod = load("seed-model", "model")
+        model_mod.set_currency("EUR")
+        self.assertEqual(model_mod.money(1500), "EUR 1,500")
+        self.assertEqual(model_mod.money(-2.5, 2), "-EUR 2.50")
+        model_mod.set_currency("USD")
+
+    def test_corralplus_example_runs_and_funds_add_up(self):
+        model_mod = load("seed-model", "model")
+        path = os.path.join(ROOT, "seed-model", "assumptions.corralplus.example.json")
+        doc = json.load(open(path, encoding="utf-8"))
+        self.assertTrue(model_mod.check_funds(doc)[0])
