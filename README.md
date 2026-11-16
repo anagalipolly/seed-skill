@@ -155,3 +155,12 @@ you and to an investor, not to predict the future.
 **The data is free and public.** The App Store's search and review feeds are
 not an official API and can change or rate-limit. SEC EDGAR asks every
 automated request to say who is asking.
+
+## Latinoamérica / Latin America
+
+Adaptación para fundadores en Latinoamérica (ejemplo: Corral+, gestión ganadera por WhatsApp en Venezuela):
+
+- **Moneda:** `seed-model`, `seed-market` y `seed-closer` aceptan `currency` (por ejemplo `"VES"`, `"COP"`, `"EUR"`). Con `"USD"` se ve `$`; con otra moneda se muestra el código (`COP 1,500,000`).
+- **Ejemplo en español:** `seed-model/assumptions.corralplus.example.json` es un modelo de suscripción mensual con supuestos de prueba. Reemplaza cada número por los tuyos antes de usarlo.
+- **Inversionistas:** `seed-investors` entiende `LatAm`, `Latinoamérica` y `América Latina`: un inversionista que apoya la región cuenta como coincidencia para un país como Venezuela, Colombia o México. La búsqueda automática en la SEC sigue siendo de EE. UU.; para la región, la lista sale de la investigación web y de tu propio CSV.
+- Las plantillas de correo y los `SKILL.md` siguen en inglés.
