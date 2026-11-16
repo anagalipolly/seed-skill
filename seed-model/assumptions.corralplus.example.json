@@ -1,0 +1,46 @@
+{
+  "_about": "EJEMPLO para Corral+ (suscripción mensual por ganadero, cobrada por WhatsApp). TODOS los números son SUPUESTOS DE PRUEBA, no datos reales: reemplázalos con los tuyos (precio, costos de WhatsApp/IA, clientes del piloto, equipo). La moneda y los porcentajes se escriben como en el ejemplo (15 significa 15%). Con el ganadero como 'cliente' y la suscripción mensual como 'orden', el take rate es 100 porque Corral+ se queda con todo el precio.",
+  "company": "Corral+",
+  "currency": "USD",
+  "unit": "suscripción",
+  "units": "suscripciones",
+  "start_month": "2027-01",
+  "cash_at_start": 0,
+  "raise": 150000,
+  "raise_month": 1,
+  "price": 30,
+  "take_rate_pct": 100,
+  "cost_per_order": [
+    {"label": "mensajes de WhatsApp (plantillas y servicio)", "fixed": 2.50},
+    {"label": "modelo de IA (OpenAI) por ganadero", "fixed": 1.50},
+    {"label": "comisión de cobro", "pct_of_price": 3.0}
+  ],
+  "customers": {
+    "starting": 15,
+    "new_month_1": 10,
+    "new_growth_pct": [10, 5, 2],
+    "churn_monthly_pct": 4,
+    "orders_per_customer_month": 1
+  },
+  "cac": 40,
+  "payroll_overhead_pct": 0,
+  "payroll": [
+    {"role": "Fundadora, CEO", "monthly": 1500, "start_month": 1},
+    {"role": "Soporte y onboarding de ganaderos", "monthly": 600, "start_month": 4},
+    {"role": "Desarrollador / automatización", "monthly": 1200, "start_month": 7}
+  ],
+  "opex": [
+    {"label": "n8n, hosting y base de datos", "monthly": 120},
+    {"label": "herramientas y licencias", "monthly": 80},
+    {"label": "contabilidad y legal", "monthly": 150}
+  ],
+  "one_off": [
+    {"label": "visitas de captación a fincas (piloto ampliado)", "month": 3, "cost": 2500}
+  ],
+  "use_of_funds": {
+    "Producto y automatización": 60000,
+    "Captación y ventas en fincas": 40000,
+    "Soporte y operación": 30000,
+    "Legal y reserva": 20000
+  }
+}
