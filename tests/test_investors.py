@@ -438,3 +438,16 @@ class Cli(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class LatamGeographyTests(unittest.TestCase):
+    def test_latam_investor_fits_a_country_in_the_region(self):
+        inv = load("seed-investors", "investors")
+        self.assertTrue(inv.geo_match(["Venezuela"], ["LatAm"])[0])
+        self.assertTrue(inv.geo_match(["Venezuela"], ["Latinoamérica"])[0])
+        self.assertTrue(inv.geo_match(["Venezuela"], ["Global"])[0])
+
+    def test_other_regions_do_not_fit(self):
+        inv = load("seed-investors", "investors")
+        self.assertFalse(inv.geo_match(["Venezuela"], ["US"])[0])
+        self.assertFalse(inv.geo_match(["Venezuela"], ["Colombia"])[0])
