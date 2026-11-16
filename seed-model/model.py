@@ -85,10 +85,20 @@ def half_up(x):
     return int(D(x).quantize(ONE, rounding=ROUND_HALF_UP))
 
 
+SYMBOL = "$"   # "$" for USD; any other currency prints its code ("VES 1,500"), set by set_currency()
+
+
+def set_currency(cur):
+    """USD keeps the dollar sign; any other currency code is printed in front of the number."""
+    global SYMBOL
+    cur = str(cur or "USD").strip()
+    SYMBOL = "$" if cur.upper() == "USD" else cur + " "
+
+
 def money(x, dp=0):
     q = D(x).quantize(CENT if dp else ONE, rounding=ROUND_HALF_UP)
     sign = "-" if q < 0 else ""
-    return "%s$%s" % (sign, format(abs(q), ",f"))
+    return "%s%s%s" % (sign, SYMBOL, format(abs(q), ",f"))
 
 
 def fnum(x):
@@ -154,6 +164,7 @@ def validate(doc):
     a = {"company": str(doc.get("company") or "Your startup"), "currency": str(doc.get("currency") or "USD"),
          "unit": str(doc.get("unit") or "order")}
     a["units"] = str(doc.get("units") or a["unit"] + "s")
+    set_currency(a["currency"])
     sm = str(doc.get("start_month") or "")
     m = re.match(r"^(\d{4})-(\d{2})$", sm)
     if not m or not 1 <= int(m.group(2)) <= 12:
@@ -387,6 +398,7 @@ def check_funds(doc):
 def describe(model, show_months=False):
     s, ue = model["summary"], model["unit_economics"]
     a = model["assumptions"]
+    set_currency(s["currency"])
     start = tuple(int(x) for x in s["start_month"].split("-"))
     unit, units = s["unit"], a.get("units") or s["unit"] + "s"
 
