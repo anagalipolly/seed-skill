@@ -309,10 +309,11 @@ def cmd_bottom_up(a):
     value = whole(cu * fr * pr)
     cname = a.customers_name or "customers you can reach"
     unit = a.unit or "purchase"
+    units = a.units or unit + "s"   # --units for plurals that are not just +s ("suscripción" -> "suscripciones")
     ins = [inp(cname, cu, "count", a.customers_source, level, "--customers-source"),
-           inp("%ss a year per customer" % unit, fr, "per year", a.frequency_source, level, "--frequency-source"),
+           inp("%s a year per customer" % units, fr, "per year", a.frequency_source, level, "--frequency-source"),
            inp("price per %s" % unit, pr, cur, a.price_source, level, "--price-source")]
-    formula = "%s %s x %s %ss a year x %s = %s" % (fmt_num(cu), cname, fmt_num(fr), unit,
+    formula = "%s %s x %s %s a year x %s = %s" % (fmt_num(cu), cname, fmt_num(fr), units,
                                                   ("$" if cur == "USD" else cur + " ") + fmt_num(pr), money_text(value, cur))
     notes = set_level(doc, level, value, "bottom-up", formula, ins, today_of(a.today))
     lines = ["%s (bottom-up): %s a year" % (level.upper(), big(value, cur)), "  " + formula]
@@ -466,6 +467,7 @@ def main(argv=None):
     p.add_argument("--price", required=True)
     p.add_argument("--price-source", required=True)
     p.add_argument("--unit", help='what one purchase is, e.g. "walk" (default "purchase")')
+    p.add_argument("--units", help='plural of --unit when it is not just +s, e.g. "suscripciones" (default unit + "s")')
     p.add_argument("--level", choices=["sam", "tam"])
     p.add_argument("--currency")
     common(p)
