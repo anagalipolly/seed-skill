@@ -80,7 +80,19 @@ ALIASES = {"email_address": "email", "e-mail": "email", "e_mail": "email", "mail
 GLOBAL = ("global", "any", "anywhere", "worldwide", "remote")
 GEO_STOP = {"new", "north", "south", "east", "west", "san", "los", "las", "the", "of", "city", "and", "bay", "area"}
 GEO_ALIASES = {"usa": "us", "united states": "us", "united states of america": "us", "u.s.": "us",
-               "u.s.a.": "us", "uk": "gb", "united kingdom": "gb"}
+               "u.s.a.": "us", "uk": "gb", "united kingdom": "gb",
+               "ee. uu.": "us", "estados unidos": "us", "reino unido": "gb",
+               "américa latina": "latam", "america latina": "latam", "latin america": "latam",
+               "latinoamérica": "latam", "latinoamerica": "latam", "lac": "latam",
+               "sudamérica": "south america", "sudamerica": "south america"}
+
+# Latin America: an investor that backs the region ("latam") also fits a startup in any of these countries.
+LATAM_REGION = ("latam", "south america", "andean region", "región andina", "region andina")
+LATAM_COUNTRIES = frozenset((
+    "venezuela", "colombia", "brazil", "brasil", "argentina", "chile", "peru", "perú", "ecuador", "bolivia",
+    "paraguay", "uruguay", "mexico", "méxico", "panama", "panamá", "costa rica", "guatemala", "honduras",
+    "el salvador", "nicaragua", "dominican republic", "república dominicana", "republica dominicana",
+    "cuba", "puerto rico"))
 SECURITIES = [("isEquityType", "equity"), ("isDebtType", "debt"), ("isOptionToAcquireType", "options"),
               ("isSecurityToBeAcquiredType", "securities on exercise"),
               ("isPooledInvestmentFundInterestsType", "fund interests"), ("isTenantInCommonType", "tenant in common"),
@@ -222,6 +234,8 @@ def geo_match(ours, theirs):
         return True, "invests globally"
     for o in ours:
         on = norm_geo(o)
+        if on in LATAM_COUNTRIES and any(g in LATAM_REGION for g in th):
+            return True, "invests in Latin America"
         ow = (set(re.findall(r"[a-z0-9.]+", on)) - GEO_STOP) | {on}
         for t in th:
             tw = (set(re.findall(r"[a-z0-9.]+", t)) - GEO_STOP) | {t}
